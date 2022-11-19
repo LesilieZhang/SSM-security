@@ -19,7 +19,6 @@
 				$("#loginBtn").click();
 			}
 		});
-
 		//给"登录"按钮添加单击事件
 		$("#loginBtn").click(function () {
 			//收集参数
@@ -72,7 +71,7 @@
 		<img src="image/login.jpg" style="width: 100%; height: 90%; position: relative; top: 50px;">
 	</div>
 	<div id="top" style="height: 50px; background-color: #3C3C3C; width: 100%;">
-		<div style="position: absolute; top: 5px; left: 0px; font-size: 30px; font-weight: 400; color: white; font-family: 'times new roman'">LIBSYSTEM &nbsp;<span style="font-size: 12px;">&copy;2022&nbsp;图书管理系统</span></div>
+		<div style="position: absolute; top: 5px; left: 0px; font-size: 30px; font-weight: 400; color: white; font-family: 'times new roman'">图书管理系统 &nbsp;<span style="font-size: 12px;">&copy;2022&nbsp;LIBSYSTEM</span></div>
 	</div>
 	
 	<div style="position: absolute; top: 120px; right: 100px;width:620px;height:500px;border:1px solid #D5D5D5">

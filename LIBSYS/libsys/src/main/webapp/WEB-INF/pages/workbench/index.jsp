@@ -34,8 +34,7 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 			//当前项目颜色变成白色
 			$(this).children("a").css("color","white");
 		});
-		
-		
+		//写controller跳转
 		window.open("workbench/main/index.do","workareaFrame");
 
 		//给“确定”按钮添加单击事件
@@ -142,7 +141,7 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 	
 	<!-- 顶部 -->
 	<div id="top" style="height: 50px; background-color: #3C3C3C; width: 100%;">
-		<div style="position: absolute; top: 5px; left: 0px; font-size: 30px; font-weight: 400; color: white; font-family: 'times new roman'">CRM &nbsp;<span style="font-size: 12px;">&copy;2019&nbsp;动力节点</span></div>
+		<div style="position: absolute; top: 5px; left: 0px; font-size: 30px; font-weight: 400; color: white; font-family: 'times new roman'">图书管理系统 &nbsp;<span style="font-size: 12px;">&copy;2022&nbsp;LIBSYSTEM</span></div>
 		<div style="position: absolute; top: 15px; right: 15px;">
 			<ul>
 				<li class="dropdown user-dropdown">
@@ -162,14 +161,12 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 	
 	<!-- 中间 -->
 	<div id="center" style="position: absolute;top: 50px; bottom: 30px; left: 0px; right: 0px;">
-	
-		<!-- 导航 -->
+		<!-- 导航 ：菜单-->
 		<div id="navigation" style="left: 0px; width: 18%; position: relative; height: 100%; overflow:auto;">
-		
 			<ul id="no1" class="nav nav-pills nav-stacked">
-				<li class="liClass"><a href="workbench/main/index.do" target="workareaFrame"><span class="glyphicon glyphicon-home"></span> 工作台</a></li>
-				<li class="liClass"><a href="javascript:void(0);" target="workareaFrame"><span class="glyphicon glyphicon-tag"></span> 动态</a></li>
-				<li class="liClass"><a href="javascript:void(0);" target="workareaFrame"><span class="glyphicon glyphicon-time"></span> 审批</a></li>
+				<li class="liClass"><a href="workbench/main/index.do" target="workareaFrame"><span class="glyphicon glyphicon-home"></span> 公告栏</a></li>
+				<li class="liClass"><a href="workbench/reader/index.do" target="workareaFrame"><span class="glyphicon glyphicon-user"></span> 读者管理</a></li>
+				<li class="liClass"><a href="javascript:void(0);" target="workareaFrame"><span class="glyphicon glyphicon-book"></span> 图书管理</a></li>
 				<li class="liClass"><a href="javascript:void(0);" target="workareaFrame"><span class="glyphicon glyphicon-user"></span> 客户公海</a></li>
 				<li class="liClass"><a href="workbench/activity/index.do" target="workareaFrame"><span class="glyphicon glyphicon-play-circle"></span> 市场活动</a></li>
 				<li class="liClass"><a href="clue/index.html" target="workareaFrame"><span class="glyphicon glyphicon-search"></span> 线索（潜在客户）</a></li>

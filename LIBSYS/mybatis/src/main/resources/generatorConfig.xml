@@ -62,10 +62,18 @@
             <property name="enableSubPackages" value="true"/>
 
         </javaClientGenerator>
+               <!--
                 <table tableName="tbl_user" domainObjectName="User"
                        enableCountByExample="false" enableUpdateByExample="false"
                        enableDeleteByExample="false" enableSelectByExample="false"
                        selectByExampleQueryId="false">
                 </table>
+                -->
+        <table tableName="tbl_reader" domainObjectName="Reader"
+               enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false"
+               selectByExampleQueryId="false">
+        </table>
+
     </context>
 </generatorConfiguration>

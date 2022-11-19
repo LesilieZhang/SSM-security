@@ -59,7 +59,7 @@ public class UserController {
         //传给sql语句的才要封装
         //调用service层方法，查询用户
         User user=userService.queryUserByLoginActAndPwd(map);
-       logger.info("返回的用户信息=="+user);
+       logger.info("返回的用户登录名=="+user.getLoginAct());
         //根据查询结果，生成响应信息
         ReturnObject returnObject=new ReturnObject();
         if(user==null) {
@@ -79,14 +79,12 @@ public class UserController {
             }else{
                 //登录成功
                 returnObject.setCode(Contants.RETURN_OBJECT_CODE_SUCCESS);
-
                 //把user保存到session中
                 session.setAttribute(Contants.SESSION_USER,user);
-
                 //如果需要记住密码，则往外写cookie
                 if("true".equals(isRemPwd)){
                     Cookie c1=new Cookie("loginAct",user.getLoginAct());
-                    c1.setMaxAge(10*24*60*60);
+                    c1.setMaxAge(10*24*60*60);//记住十天
                     response.addCookie(c1);
                     Cookie c2=new Cookie("loginPwd",user.getLoginPwd());
                     c2.setMaxAge(10*24*60*60);
@@ -102,7 +100,22 @@ public class UserController {
                 }
             }
         }
-        logger.info("返回的是=="+returnObject);
+        logger.info("返回的是=="+returnObject.getCode());
         return returnObject;
+    }
+
+    @RequestMapping("/settings/qx/user/logout.do")
+    public String logout(HttpServletResponse response,HttpSession session){
+        //清空cookie
+        Cookie c1=new Cookie("loginAct","1");
+        c1.setMaxAge(0);
+        response.addCookie(c1);
+        Cookie c2=new Cookie("loginPwd","1");
+        c2.setMaxAge(0);
+        response.addCookie(c2);
+        //销毁session
+        session.invalidate();
+        //跳转到首页
+        return "redirect:/";//借助springmvc来重定向
     }
 }
