@@ -24,4 +24,6 @@ public interface ReaderService {
     Reader queryReaderById(String id);
 
     int saveEditReader(Reader reader);
+    int deleteReaderByIds(String[] ids);
+
 }

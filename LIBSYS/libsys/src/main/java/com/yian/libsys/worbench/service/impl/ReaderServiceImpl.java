@@ -67,4 +67,9 @@ public class ReaderServiceImpl implements ReaderService {
     public int saveEditReader(Reader reader) {
         return readerMapper.updateReader(reader);
     }
+
+    @Override
+    public int deleteReaderByIds(String[] ids) {
+        return readerMapper.deleteReaderByIds(ids);
+    }
 }

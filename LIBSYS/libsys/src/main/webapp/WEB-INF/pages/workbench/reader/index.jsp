@@ -155,14 +155,14 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 
 				//发送请求
 				$.ajax({
-					url:'workbench/activity/deleteActivityIds.do',
+					url:'workbench/reader/deleteReaderIds.do',
 					data:ids,
 					type:'post',
 					dataType:'json',
 					success:function (data) {
 						if(data.code=="1"){
 							//刷新市场活动列表,显示第一页数据,保持每页显示条数不变
-							queryActivityByConditionForPage(1,$("#demo_pag1").bs_pagination('getOption', 'rowsPerPage'));
+							queryReaderByConditionForPage(1,$("#demo_pag1").bs_pagination('getOption', 'rowsPerPage'));
 						}else{
 							//提示信息
 							alert(data.message);
@@ -203,6 +203,7 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 					$("#edit-deptname").val(data.deptname);
 					$("#edit-classname").val(data.classname);
 					$("#edit-idNumber").val(data.idNumber);
+					$("#edit-id").val(data.id);
 					//弹出模态窗口
 					$("#editReaderModal").modal("show");
 				}
@@ -515,7 +516,6 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
                                 <input type="text" class="form-control" id="edit-readerName" value="张三">
                             </div>
 						</div>
-
 						<div class="form-group">
 							<label for="edit-sex" class="col-sm-2 control-label">性别</label>
 							<div class="col-sm-10" style="width: 300px;">
@@ -523,17 +523,19 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 									<option value="1">男</option>
 									<option value="0">女</option>
 							</select>
+						</div>
+						<div class="form-group">
 							<label for="edit-idNumber" class="col-sm-2 control-label">学号</label>
 							<div class="col-sm-10" style="width: 300px;">
 								<input type="text" class="form-control" id="edit-idNumber" value="2018005534">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="edit-phone" class="col-sm-2 control-label">手机号</label>
-							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control" id="edit-phone" value="18650825096">
+							<div class="form-group">
+								<label for="edit-phone" class="col-sm-2 control-label">手机号</label>
+								<div class="col-sm-10" style="width: 300px;">
+									<input type="text" class="form-control" id="edit-phone" value="18650825096">
+								</div>
 							</div>
-						</div>
 						<div class="form-group">
 							<label for="edit-deptname" class="col-sm-2 control-label">系别</label>
 							<div class="col-sm-10" style="width: 81%;">
@@ -546,6 +548,7 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 								<input type="text" class="form-control" id="edit-classname" value="1班">
 							</div>
 						</div>
+							</div>
 					</form>
 				</div>
 				<div class="modal-footer">

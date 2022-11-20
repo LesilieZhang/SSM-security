@@ -120,18 +120,19 @@ public class ReaderController {
         //根据查询结果，返回响应信息
         User user=(User) session.getAttribute(Contants.SESSION_USER);
         reader.setCreateUser(user.getName());
+        logger.info("返回的数据==="+reader.getId());
         return reader;
     }
 
     @RequestMapping("/workbench/reader/saveEditReader.do")
+    @ResponseBody
     public Object saveEditReader(Reader reader,HttpSession session) {
-        logger.info("进入====");
         //获得当前的user
         User user = (User) session.getAttribute(Contants.SESSION_USER);
         reader.setUpdateTime(new Date());
         reader.setUpdateUser(user.getName());
+        logger.info("id==="+  reader.getId());
         ReturnObject returnObject = new ReturnObject();
-
         try {
             int ret = readerService.saveEditReader(reader);
             if (ret > 0) {
@@ -148,4 +149,27 @@ public class ReaderController {
         return returnObject;
     }
 
+
+        @RequestMapping("/workbench/reader/deleteReaderIds.do")
+        @ResponseBody
+        public Object deleteReader(String[] id){
+        logger.info("删除==="+id);
+            //形参String[] id：接受前台发来的数组
+            ReturnObject returnObject=new ReturnObject();
+            try{
+                int ret=readerService.deleteReaderByIds(id);
+                //ret接受返回删除的影响记录条数
+                if(ret>0){//如果影响记录条数>0
+                    returnObject.setCode(Contants.RETURN_OBJECT_CODE_SUCCESS);//删除成功
+                }else{
+                    returnObject.setCode(Contants.RETURN_OBJECT_CODE_FAIL);//删除失败
+                    returnObject.setMessage("系统忙，请稍后重试....");
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+                returnObject.setCode(Contants.RETURN_OBJECT_CODE_FAIL);
+                returnObject.setMessage("系统忙，请稍后重试....");
+            }
+            return returnObject;
+        }
 }
