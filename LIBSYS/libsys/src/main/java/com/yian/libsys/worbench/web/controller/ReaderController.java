@@ -48,7 +48,7 @@ public class ReaderController {
       List<User> userList=userService.queryAllUsers();
       //把数据保存到request中
         request.setAttribute("userList",userList);
-        //请求转发到市场活动的主页面
+        //请求转发到读者信息的主页面
         return "workbench/reader/index";
     }
 
@@ -101,14 +101,51 @@ public class ReaderController {
         map.put("classname",className);
         map.put("beginNo",(pageNo-1)*pageSize);
         map.put("pageSize",pageSize);
+        logger.info("封装好的map==="+map);
         List<Reader> readerList=readerService.queryReaderByConditionForPage(map);
+        logger.info("查询回来的数据readerList==="+readerList);
         int totalRows=readerService.queryCountOfReaderByCondition(map);
         //根据查询结果结果，生成响应信息
         Map<String,Object> retMap=new HashMap<>();
         retMap.put("readerList",readerList);
         retMap.put("totalRows",totalRows);
+        logger.info("retMap===="+retMap);
         return retMap;
     }
 
+    @RequestMapping("/workbench/reader/queryReaderById.do")
+    @ResponseBody
+    public Object queryReaderById(String id,HttpSession session){
+        Reader reader=readerService.queryReaderById(id);
+        //根据查询结果，返回响应信息
+        User user=(User) session.getAttribute(Contants.SESSION_USER);
+        reader.setCreateUser(user.getName());
+        return reader;
+    }
+
+    @RequestMapping("/workbench/reader/saveEditReader.do")
+    public Object saveEditReader(Reader reader,HttpSession session) {
+        logger.info("进入====");
+        //获得当前的user
+        User user = (User) session.getAttribute(Contants.SESSION_USER);
+        reader.setUpdateTime(new Date());
+        reader.setUpdateUser(user.getName());
+        ReturnObject returnObject = new ReturnObject();
+
+        try {
+            int ret = readerService.saveEditReader(reader);
+            if (ret > 0) {
+                returnObject.setCode(Contants.RETURN_OBJECT_CODE_SUCCESS);
+            } else {
+                returnObject.setCode(Contants.RETURN_OBJECT_CODE_FAIL);
+                returnObject.setMessage("系统忙，请稍后重试....");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            returnObject.setCode(Contants.RETURN_OBJECT_CODE_FAIL);
+            returnObject.setMessage("系统忙，请稍后重试....");
+        }
+        return returnObject;
+    }
 
 }

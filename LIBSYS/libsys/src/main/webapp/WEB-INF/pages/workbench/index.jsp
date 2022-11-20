@@ -166,7 +166,7 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 			<ul id="no1" class="nav nav-pills nav-stacked">
 				<li class="liClass"><a href="workbench/main/index.do" target="workareaFrame"><span class="glyphicon glyphicon-home"></span> 公告栏</a></li>
 				<li class="liClass"><a href="workbench/reader/index.do" target="workareaFrame"><span class="glyphicon glyphicon-user"></span> 读者管理</a></li>
-				<li class="liClass"><a href="javascript:void(0);" target="workareaFrame"><span class="glyphicon glyphicon-book"></span> 图书管理</a></li>
+				<li class="liClass"><a href="workbench/book/index.do" target="workareaFrame"><span class="glyphicon glyphicon-book"></span> 图书管理</a></li>
 				<li class="liClass"><a href="javascript:void(0);" target="workareaFrame"><span class="glyphicon glyphicon-user"></span> 客户公海</a></li>
 				<li class="liClass"><a href="workbench/activity/index.do" target="workareaFrame"><span class="glyphicon glyphicon-play-circle"></span> 市场活动</a></li>
 				<li class="liClass"><a href="clue/index.html" target="workareaFrame"><span class="glyphicon glyphicon-search"></span> 线索（潜在客户）</a></li>

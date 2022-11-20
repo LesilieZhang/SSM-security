@@ -110,12 +110,15 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 		});
 
 		//当主页面加载完成，查询所有数据的第一页以及所有数据的总条数,默认每页显示10条
-		queryActivityByConditionForPage(1,10);
+	//	queryActivityByConditionForPage(1,10);
+		queryReaderByConditionForPage(1,10);
 
 		//给"查询"按钮添加单击事件
-		$("#queryActivityBtn").click(function () {
+		$("#queryReaderBtn").click(function () {
 			//查询所有符合条件数据的第一页以及所有符合条件数据的总条数;
-			queryActivityByConditionForPage(1,$("#demo_pag1").bs_pagination('getOption', 'rowsPerPage'));
+			//queryActivityByConditionForPage(1,$("#demo_pag1").bs_pagination('getOption', 'rowsPerPage'));
+
+			queryReaderByConditionForPage(1,$("#demo_pag1").bs_pagination('getOption', 'rowsPerPage'));
 		});
 
 		//给"全选"按钮添加单击事件
@@ -134,7 +137,7 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 		});
 
 		//给"删除"按钮添加单击事件
-		$("#deleteActivityBtn").click(function () {
+		$("#deleteReaderBtn").click(function () {
 			//收集参数
 			//获取列表中所有被选中的checkbox
 			var chekkedIds=$("#tBody input[type='checkbox']:checked");
@@ -170,24 +173,22 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 		});
 
 		//给"修改"按钮添加单击事件
-		$("#editActivityBtn").click(function () {
+		$("#editReaderBtn").click(function () {
 			//收集参数:id
 			//获取列表中被选中的checkbox
-
 			var chkedIds=$("#tBody input[type='checkbox']:checked");//被选中的checkbox
 			if(chkedIds.size()==0){
-				alert("请选择要修改的市场活动");
+				alert("请选择要修改的读者");
 				return;
 			}
 			if(chkedIds.size()>1){
-				alert("每次只能修改一条市场活动");
+				alert("每次只能修改一条读者信息");
 				return;
 			}
-
 			var id=chkedIds[0].value; //获取value值
 			//发送请求
 			$.ajax({
-				url:'workbench/activity/queryActivityById.do',
+				url:'workbench/reader/queryReaderById.do',
 				data:{
 					id:id
 				},
@@ -195,55 +196,56 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 				dataType:'json',
 				success:function (data) {
 					//把市场活动的信息显示在修改的模态窗口上
-					$("#edit-id").val(data.id);
-					$("#edit-marketActivityOwner").val(data.owner);
-					$("#edit-marketActivityName").val(data.name);
-					$("#edit-startTime").val(data.startDate);
-					$("#edit-endTime").val(data.endDate);
-					$("#edit-cost").val(data.cost);
-					$("#edit-description").val(data.description);
+					$("#edit-createBy").val(data.creatBy);
+					$("#edit-readerName").val(data.name);
+					$("#edit-sex").val(data.sex);
+					$("#edit-phone").val(data.phone);
+					$("#edit-deptname").val(data.deptname);
+					$("#edit-classname").val(data.classname);
+					$("#edit-idNumber").val(data.idNumber);
 					//弹出模态窗口
-					$("#editActivityModal").modal("show");
+					$("#editReaderModal").modal("show");
 				}
 			});
 		});
-
 		//给"更新"按钮添加单击事件
-		$("#saveEditActivityBtn").click(function () {
+		$("#saveEditReaderBtn").click(function () {
 			//收集参数
 			var id=$("#edit-id").val();
-			var owner=$("#edit-marketActivityOwner").val();
-			var name=$.trim($("#edit-marketActivityName").val());
-			var startDate=$("#edit-startTime").val();
-			var endDate=$("#edit-endTime").val();
-			var cost=$.trim($("#edit-cost").val());
-			var description=$.trim($("#edit-description").val());
+			var createBy=$("#edit-createBy").val();
+			var readerName=$.trim($("#edit-readerName").val());
+			var sex=$("#edit-sex").val();
+			var phone=$("#edit-phone").val();
+			var deptname=$.trim($("#edit-deptname").val());
+			var classname=$.trim($("#edit-classname").val());
+			var idNumber=$.trim($("#edit-idNumber").val());
 			//表单验证(作业)
 			//发送请求
 			$.ajax({
-				url:'workbench/activity/saveEditActivity.do',
+				url:'workbench/reader/saveEditReader.do',
 				data:{
 					id:id,
-					owner:owner,
-					name:name,
-					startDate:startDate,
-					endDate:endDate,
-					cost:cost,
-					description:description
+					creatBy:createBy,
+					name:readerName,
+					sex:sex,
+					phone:phone,
+					deptname:deptname,
+					classname:classname,
+					idNumber:idNumber
 				},
 				type:'post',
 				dataType:'json',
 				success:function (data) {
 					if(data.code=="1"){
 						//关闭模态窗口
-						$("#editActivityModal").modal("hide");
+						$("#editReaderModal").modal("hide");
 						//刷新市场活动列表,保持页号和每页显示条数都不变
-						queryActivityByConditionForPage($("#demo_pag1").bs_pagination('getOption', 'currentPage'),$("#demo_pag1").bs_pagination('getOption', 'rowsPerPage'));
+						queryReaderByConditionForPage($("#demo_pag1").bs_pagination('getOption', 'currentPage'),$("#demo_pag1").bs_pagination('getOption', 'rowsPerPage'));
 					}else{
 						//提示信息
 						alert(data.message);
 						//模态窗口不关闭
-						$("#editActivityModal").modal("show");
+						$("#editReaderModal").modal("show");
 					}
 				}
 			});
@@ -255,7 +257,6 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 			//发送同步请求
 			window.location.href="workbench/activity/exportAllActivitys.do";
 		});
-
 		//给“选择导出”按钮添加单击事件
 		$("#exportActivityChooseByIdBtn").click(function () {
 			var checkedIds = $("#tBody input:checked")//父标签tBody下的被选中的input
@@ -335,9 +336,9 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 			url:'workbench/reader/queryReaderByConditionForPage.do',
 			data:{
 				name:name,
-				idNum:idNum,
-				dept:dept,
-				className:className,
+				idNumber:idNum,
+				deptname:dept,
+				classname:className,
 				pageNo:pageNo,
 				pageSize:pageSize
 			},
@@ -357,10 +358,10 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 					htmlStr+="<td><input type=\"checkbox\" value=\""+obj.id+"\"/></td>";
 					htmlStr+="<td><a style=\"text-decoration: none; cursor: pointer;\" onclick=\"window.location.href='detail.html';\">"+obj.name+"</a></td>";
 					htmlStr+="<td>"+obj.sex+"</td>";
-					htmlStr+="<td>"+obj.idNum+"</td>";
+					htmlStr+="<td>"+obj.idNumber+"</td>";
 					htmlStr+="<td>"+obj.phone+"</td>";
-					htmlStr+="<td>"+obj.dept+"</td>";
-					htmlStr+="<td>"+obj.className+"</td>";
+					htmlStr+="<td>"+obj.deptname+"</td>";
+					htmlStr+="<td>"+obj.classname+"</td>";
 					htmlStr+="</tr>";
 				});
 				$("#tBody").html(htmlStr);
@@ -469,7 +470,12 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 						<div class="form-group">
 							<label for="create-class" class="col-sm-2 control-label">班级</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control" id="create-class">
+								<input type="text" class="form-control  match-rotation-input"
+									   maxlength="3"
+									   onkeyup="value=value.replace(/[^\d]/g,'')"
+								onblur="value=value.replace(/[^\d]/g,'')"
+								ng-model="schedule.round"
+								placeholder="请输入数字" id="create-class">
 							</div>
 						</div>
 					</form>
@@ -512,13 +518,14 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 
 						<div class="form-group">
 							<label for="edit-sex" class="col-sm-2 control-label">性别</label>
+							<div class="col-sm-10" style="width: 300px;">
 							<select class="form-control" id="edit-sex">
 									<option value="1">男</option>
 									<option value="0">女</option>
 							</select>
-							<label for="edit-idNum" class="col-sm-2 control-label">学号</label>
+							<label for="edit-idNumber" class="col-sm-2 control-label">学号</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control" id="edit-idNum" value="2018005534">
+								<input type="text" class="form-control" id="edit-idNumber" value="2018005534">
 							</div>
 						</div>
 						<div class="form-group">
@@ -528,22 +535,22 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="edit-dept" class="col-sm-2 control-label">系别</label>
+							<label for="edit-deptname" class="col-sm-2 control-label">系别</label>
 							<div class="col-sm-10" style="width: 81%;">
-								<input type="text" class="form-control" id="edit-dept" value="计算机系">
+								<input type="text" class="form-control" id="edit-deptname" value="计算机系">
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="edit-class" class="col-sm-2 control-label">班级</label>
+							<label for="edit-classname" class="col-sm-2 control-label">班级</label>
 							<div class="col-sm-10" style="width: 81%;">
-								<input type="text" class="form-control" id="edit-class" value="1班">
+								<input type="text" class="form-control" id="edit-classname" value="1班">
 							</div>
 						</div>
 					</form>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-					<button type="button" class="btn btn-primary" id="saveEditActivityBtn">更新</button>
+					<button type="button" class="btn btn-primary" id="saveEditReaderBtn">更新</button>
 				</div>
 			</div>
 		</div>
@@ -631,6 +638,7 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 				  <button type="button" class="btn btn-primary" id="addReaderBtn"><span class="glyphicon glyphicon-plus"></span> 创建</button>
 				  <button type="button" class="btn btn-default" id="editReaderBtn"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
 				  <button type="button" class="btn btn-danger" id="deleteReaderBtn"><span class="glyphicon glyphicon-minus"></span> 删除</button>
+					<button type="button" class="btn btn-danger" id="checkDetialBtn"><span class="glyphicon glyphicon-zoom-in"></span> 查看详情</button>
 				</div>
 				<div class="btn-group" style="position: relative; top: 18%;">
                     <button type="button" class="btn btn-default" data-toggle="modal" data-target="#importActivityModal" ><span class="glyphicon glyphicon-import"></span> 上传列表数据（导入）</button>

@@ -57,4 +57,14 @@ public class ReaderServiceImpl implements ReaderService {
 
         return readerMapper.selectCountOfReaderByCondition( map);
     }
+
+    @Override
+    public Reader queryReaderById(String id) {
+        return readerMapper.selectReaderById(id);
+    }
+
+    @Override
+    public int saveEditReader(Reader reader) {
+        return readerMapper.updateReader(reader);
+    }
 }

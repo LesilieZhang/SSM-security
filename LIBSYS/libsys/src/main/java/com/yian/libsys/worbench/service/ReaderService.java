@@ -19,4 +19,9 @@ public interface ReaderService {
     List<Reader> queryReaderByConditionForPage(Map<String,Object> map);
 
     int queryCountOfReaderByCondition(Map<String,Object> map);
+
+
+    Reader queryReaderById(String id);
+
+    int saveEditReader(Reader reader);
 }
