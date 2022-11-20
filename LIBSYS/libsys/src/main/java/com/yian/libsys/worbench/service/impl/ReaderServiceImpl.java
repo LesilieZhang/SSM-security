@@ -1,7 +1,12 @@
 package com.yian.libsys.worbench.service.impl;
 
+import com.yian.libsys.settings.web.controller.UserController;
 import com.yian.libsys.worbench.domain.Reader;
+import com.yian.libsys.worbench.mapper.ReaderMapper;
 import com.yian.libsys.worbench.service.ReaderService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,18 +21,40 @@ import java.util.Map;
  */
 @Service("readerService")
 public class ReaderServiceImpl implements ReaderService {
+    private final static Logger logger = LoggerFactory.getLogger((ReaderServiceImpl.class));
+
+    @Autowired
+    private ReaderMapper readerMapper;
+
+    /**
+     * 添加读者
+     * @param reader
+     * @return
+     */
     @Override
     public int saveReader(Reader reader) {
-        return 0;
+        return readerMapper.insert(reader);
     }
 
+    /**
+     * 分页查询
+     * @param map
+     * @return
+     */
     @Override
     public List<Reader> queryReaderByConditionForPage(Map<String, Object> map) {
-        return null;
+        logger.info("map==="+map);
+        return readerMapper.selectReaderByConditionForPage(map);
     }
 
+    /**
+     * 查询记录总数
+     * @param map
+     * @return
+     */
     @Override
     public int queryCountOfReaderByCondition(Map<String, Object> map) {
-        return 0;
+
+        return readerMapper.selectCountOfReaderByCondition( map);
     }
 }

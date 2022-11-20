@@ -21,70 +21,77 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 <script type="text/javascript">
 
 	$(function(){
-		//给"创建"按钮添加单击事件
-		$("#createActivityBtn").click(function () {
+		//给"创建读者"按钮添加单击事件
+		$("#addReaderBtn").click(function () {
 			//初始化工作
 			//重置表单
-			$("#createActivityForm").get(0).reset();
+			$("#createReaderForm").get(0).reset();
 			//弹出创建市场活动的模态窗口
-			$("#createActivityModal").modal("show");
+			$("#AddReaderModal").modal("show");
 		});
 		
 		//给"保存"按钮添加单击事件
-		$("#saveCreateActivityBtn").click(function () {
+		$("#saveReaderBtn").click(function () {
 			//收集参数
-			var owner=$("#create-marketActivityOwner").val();
-			var name=$.trim($("#create-marketActivityName").val());
-			var startDate=$("#create-startDate").val();
-			var endDate=$("#create-endDate").val();
-			var cost=$.trim($("#create-cost").val());
-			var description=$.trim($("#create-description").val());
+			var createBy=$("#create-createBy").val();//创建者
+			var name=$.trim($("#create-readerName").val());//读者姓名
+			var sex=$.trim($("#create-sex").val());//读者性别
+			var idNumber =$.trim($("#create-idNum").val());//读者学号
+			var phone=$.trim($("#create-phone").val());//读者手机号
+			var deptname=$.trim($("#create-dept").val());//读者所在的系
+			var classname=$("#create-class").val();//读者所在班级
 			//表单验证
-			if(owner==""){
-				alert("所有者不能为空");
+			if(createBy==""){
+				alert("操作人不能为空");
 				return;
 			}
 			if(name==""){
-				alert("名称不能为空");
+				alert("读者姓名不能为空");
 				return;
 			}
-			if(startDate!=""&&endDate!=""){
-				//使用字符串的大小代替日期的大小
-				if(endDate<startDate){
-					alert("结束日期不能比开始日期小");
+		    if(idNumber.length!=10){
+				alert("请输入十位学号！")
+				return;
+			}
+			var myreg=/^1[3-9]\d{9}$/;
+			if(!myreg.test(phone)){
+					alert("请输入正确手机号！")
 					return;
 				}
+			if(deptname==""){
+				alert("请输入所在系！")
+				return;
 			}
-
-			var regExp=/^(([1-9]\d*)|0)$/;
-			if(!regExp.test(cost)){
-				alert("成本只能为非负整数");
+			if(classname==""){
+				alert("请输入所在班级！")
 				return;
 			}
 			//发送请求
 			$.ajax({
-				url:'workbench/activity/saveCreateActivity.do',
+				url:'workbench/reader/saveReader.do',
 				data:{
-					owner:owner,
+					creatBy:createBy,
 					name:name,
-					startDate:startDate,
-					endDate:endDate,
-					cost:cost,
-					description:description
+					sex:sex,
+					idNumber:idNumber,
+					phone:phone,
+					deptname:deptname,
+					classname:classname
 				},
 				type:'post',
 				dataType:'json',
 				success:function (data) {
 					if(data.code=="1"){
 						//关闭模态窗口
-						$("#createActivityModal").modal("hide");
+						$("#AddReaderModal").modal("hide");
 						//刷新市场活动列，显示第一页数据，保持每页显示条数不变
-						queryActivityByConditionForPage(1,$("#demo_pag1").bs_pagination('getOption', 'rowsPerPage'));
+					//	queryActivityByConditionForPage(1,$("#demo_pag1").bs_pagination('getOption', 'rowsPerPage'));
+						queryReaderByConditionForPage(1,$("#demo_pag1").bs_pagination('getOption', 'rowsPerPage'))
 					}else{
 						//提示信息
 						alert(data.message);
 						//模态窗口不关闭
-						$("#createActivityModal").modal("show");//可以不写。
+						$("#AddReaderModal").modal("show");//可以不写。
 					}
 				}
 			});
@@ -102,7 +109,7 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 			clearBtn:true//设置是否显示"清空"按钮，默认是false
 		});
 
-		//当市场活动主页面加载完成，查询所有数据的第一页以及所有数据的总条数,默认每页显示10条
+		//当主页面加载完成，查询所有数据的第一页以及所有数据的总条数,默认每页显示10条
 		queryActivityByConditionForPage(1,10);
 
 		//给"查询"按钮添加单击事件
@@ -314,22 +321,23 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 		});
 	});
 
-	function queryActivityByConditionForPage(pageNo,pageSize) {
+	<!--条件查询-->
+	function queryReaderByConditionForPage(pageNo,pageSize) {
 		//收集参数
-		var name=$("#query-name").val();
-		var owner=$("#query-owner").val();
-		var startDate=$("#query-startDate").val();
-		var endDate=$("#query-endDate").val();
-		//var pageNo=1;
-		//var pageSize=10;
+		var name=$.trim($("#query-name").val());//读者姓名
+		var idNum=$.trim($("#query-id").val());//读者学号
+		var dept=$.trim($("#query-deptname").val());//读者所在的系
+		var className=$("#query-classname").val();//读者所在班级
+		var pageNo=1;
+		var pageSize=10;
 		//发送请求
 		$.ajax({
-			url:'workbench/activity/queryActivityByConditionForPage.do',
+			url:'workbench/reader/queryReaderByConditionForPage.do',
 			data:{
 				name:name,
-				owner:owner,
-				startDate:startDate,
-				endDate:endDate,
+				idNum:idNum,
+				dept:dept,
+				className:className,
 				pageNo:pageNo,
 				pageSize:pageSize
 			},
@@ -339,15 +347,20 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 				//显示总条数
 				//$("#totalRowsB").text(data.totalRows);
 				//显示市场活动的列表
-				//遍历activityList，拼接所有行数据
+				//遍历readerList，拼接所有行数据
 				var htmlStr="";
-				$.each(data.activityList,function (index,obj) {
+				console.log("返回来的data=="+data)
+				console.log("返回来的data=="+data.readerList)
+				console.log("返回来的data=="+data.totalRows)
+				$.each(data.readerList,function (index,obj) {
 					htmlStr+="<tr class=\"active\">";
 					htmlStr+="<td><input type=\"checkbox\" value=\""+obj.id+"\"/></td>";
 					htmlStr+="<td><a style=\"text-decoration: none; cursor: pointer;\" onclick=\"window.location.href='detail.html';\">"+obj.name+"</a></td>";
-					htmlStr+="<td>"+obj.owner+"</td>";
-					htmlStr+="<td>"+obj.startDate+"</td>";
-					htmlStr+="<td>"+obj.endDate+"</td>";
+					htmlStr+="<td>"+obj.sex+"</td>";
+					htmlStr+="<td>"+obj.idNum+"</td>";
+					htmlStr+="<td>"+obj.phone+"</td>";
+					htmlStr+="<td>"+obj.dept+"</td>";
+					htmlStr+="<td>"+obj.className+"</td>";
 					htmlStr+="</tr>";
 				});
 				$("#tBody").html(htmlStr);
@@ -383,7 +396,8 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 						//js代码
 						//alert(pageObj.currentPage);
 						//alert(pageObj.rowsPerPage);
-						queryActivityByConditionForPage(pageObj.currentPage,pageObj.rowsPerPage);
+						//queryActivityByConditionForPage(pageObj.currentPage,pageObj.rowsPerPage);
+						queryReaderByConditionForPage(pageObj.currentPage,pageObj.rowsPerPage);
 					}
 				});
 			}
@@ -394,126 +408,138 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 </head>
 <body>
 
-	<!-- 创建市场活动的模态窗口 -->
-	<div class="modal fade" id="createActivityModal" role="dialog">
+	<!-- 创建读者信息的模态窗口 -->
+	<div class="modal fade" id="AddReaderModal" role="dialog">
 		<div class="modal-dialog" role="document" style="width: 85%;">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">
 						<span aria-hidden="true">×</span>
 					</button>
-					<h4 class="modal-title" id="myModalLabel1">创建市场活动</h4>
+					<h4 class="modal-title" id="myModalLabel1">添加读者</h4>
 				</div>
 				<div class="modal-body">
-				
-					<form id="createActivityForm" class="form-horizontal" role="form">
-					
+
+					<!--创建读者表单-->
+					<form id="createReaderForm" class="form-horizontal" role="form">
 						<div class="form-group">
-							<label for="create-marketActivityOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
+							<!--添加操作人-->
+							<label for="create-createBy" class="col-sm-2 control-label">操作人<span style="font-size: 15px; color: red;">*</span></label>
 							<div class="col-sm-10" style="width: 300px;">
-								<select class="form-control" id="create-marketActivityOwner">
+								<select class="form-control" id="create-createBy">
 								  <c:forEach items="${userList}" var="u">
 									   <option value="${u.id}">${u.name}</option>
 								  </c:forEach>
 								</select>
 							</div>
-                            <label for="create-marketActivityName" class="col-sm-2 control-label">名称<span style="font-size: 15px; color: red;">*</span></label>
+							<!--添加读者姓名-->
+                            <label for="create-readerName" class="col-sm-2 control-label">读者姓名<span style="font-size: 15px; color: red;">*</span></label>
                             <div class="col-sm-10" style="width: 300px;">
-                                <input type="text" class="form-control" id="create-marketActivityName">
+                                <input type="text" class="form-control" id="create-readerName">
                             </div>
 						</div>
-						
-						<div class="form-group">
-							<label for="create-startDate" class="col-sm-2 control-label">开始日期</label>
-							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control mydate" name="mydate" id="create-startDate" readonly>
-							</div>
-							<label for="create-endDate" class="col-sm-2 control-label">结束日期</label>
-							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control mydate" name="mydate" id="create-endDate" readonly>
-							</div>
-						</div>
+						<!--添加读者性别-->
                         <div class="form-group">
-
-                            <label for="create-cost" class="col-sm-2 control-label">成本</label>
-                            <div class="col-sm-10" style="width: 300px;">
-                                <input type="text" class="form-control" id="create-cost">
-                            </div>
+							<label for="create-sex" class="col-sm-2 control-label">性别</label>
+							<div class="col-sm-10" style="width: 300px;">
+							<select class="form-control" id="create-sex">
+								<option value="1">男</option>
+								<option value="0">女</option>
+							</select>
+							</div>
+							<!--学号-->
+							<label for="create-idNum" class="col-sm-2 control-label">学号</label>
+							<div class="col-sm-10" style="width: 300px;">
+								<input type="text" class="form-control" id="create-idNum">
+							</div>
                         </div>
+						<!--联系方式-->
 						<div class="form-group">
-							<label for="create-description" class="col-sm-2 control-label">描述</label>
-							<div class="col-sm-10" style="width: 81%;">
-								<textarea class="form-control" rows="3" id="create-description"></textarea>
+							<label for="create-phone" class="col-sm-2 control-label">手机号</label>
+							<div class="col-sm-10" style="width: 300px;">
+								<input type="text" class="form-control" id="create-phone">
+							</div>
+							<!--所在系-->
+							<label for="create-dept" class="col-sm-2 control-label">系别</label>
+							<div class="col-sm-10" style="width: 300px;">
+								<input type="text" class="form-control" id="create-dept">
 							</div>
 						</div>
-						
+						<!--所在班级-->
+						<div class="form-group">
+							<label for="create-class" class="col-sm-2 control-label">班级</label>
+							<div class="col-sm-10" style="width: 300px;">
+								<input type="text" class="form-control" id="create-class">
+							</div>
+						</div>
 					</form>
-					
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-					<button type="button" class="btn btn-primary" id="saveCreateActivityBtn">保存</button>
+					<button type="button" class="btn btn-primary" id="saveReaderBtn">保存</button>
 				</div>
 			</div>
 		</div>
 	</div>
 	
 	<!-- 修改市场活动的模态窗口 -->
-	<div class="modal fade" id="editActivityModal" role="dialog">
+	<div class="modal fade" id="editReaderModal" role="dialog">
 		<div class="modal-dialog" role="document" style="width: 85%;">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">
 						<span aria-hidden="true">×</span>
 					</button>
-					<h4 class="modal-title" id="myModalLabel2">修改市场活动</h4>
+					<h4 class="modal-title" id="myModalLabel2">修改读者信息</h4>
 				</div>
 				<div class="modal-body">
-				
 					<form class="form-horizontal" role="form">
 						<input type="hidden" id="edit-id">
 						<div class="form-group">
-							<label for="edit-marketActivityOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
+							<label for="edit-createBy" class="col-sm-2 control-label">操作人<span style="font-size: 15px; color: red;">*</span></label>
 							<div class="col-sm-10" style="width: 300px;">
-								<select class="form-control" id="edit-marketActivityOwner">
+								<select class="form-control" id="edit-createBy">
 									<c:forEach items="${userList}" var="u">
 										<option value="${u.id}">${u.name}</option>
 									</c:forEach>
 								</select>
 							</div>
-                            <label for="edit-marketActivityName" class="col-sm-2 control-label">名称<span style="font-size: 15px; color: red;">*</span></label>
+                            <label for="edit-readerName" class="col-sm-2 control-label">读者姓名<span style="font-size: 15px; color: red;">*</span></label>
                             <div class="col-sm-10" style="width: 300px;">
-                                <input type="text" class="form-control" id="edit-marketActivityName" value="发传单">
+                                <input type="text" class="form-control" id="edit-readerName" value="张三">
                             </div>
 						</div>
 
 						<div class="form-group">
-							<label for="edit-startTime" class="col-sm-2 control-label">开始日期</label>
+							<label for="edit-sex" class="col-sm-2 control-label">性别</label>
+							<select class="form-control" id="edit-sex">
+									<option value="1">男</option>
+									<option value="0">女</option>
+							</select>
+							<label for="edit-idNum" class="col-sm-2 control-label">学号</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control" id="edit-startTime" value="2020-10-10">
-							</div>
-							<label for="edit-endTime" class="col-sm-2 control-label">结束日期</label>
-							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control" id="edit-endTime" value="2020-10-20">
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label for="edit-cost" class="col-sm-2 control-label">成本</label>
-							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control" id="edit-cost" value="5,000">
+								<input type="text" class="form-control" id="edit-idNum" value="2018005534">
 							</div>
 						</div>
-						
 						<div class="form-group">
-							<label for="edit-description" class="col-sm-2 control-label">描述</label>
+							<label for="edit-phone" class="col-sm-2 control-label">手机号</label>
+							<div class="col-sm-10" style="width: 300px;">
+								<input type="text" class="form-control" id="edit-phone" value="18650825096">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="edit-dept" class="col-sm-2 control-label">系别</label>
 							<div class="col-sm-10" style="width: 81%;">
-								<textarea class="form-control" rows="3" id="edit-description">市场活动Marketing，是指品牌主办或参与的展览会议与公关市场活动，包括自行主办的各类研讨会、客户交流会、演示会、新产品发布会、体验会、答谢会、年会和出席参加并布展或演讲的展览会、研讨会、行业交流会、颁奖典礼等</textarea>
+								<input type="text" class="form-control" id="edit-dept" value="计算机系">
 							</div>
 						</div>
-						
+						<div class="form-group">
+							<label for="edit-class" class="col-sm-2 control-label">班级</label>
+							<div class="col-sm-10" style="width: 81%;">
+								<input type="text" class="form-control" id="edit-class" value="1班">
+							</div>
+						</div>
 					</form>
-					
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -522,7 +548,6 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 			</div>
 		</div>
 	</div>
-	
 	<!-- 导入市场活动的模态窗口 -->
     <div class="modal fade" id="importActivityModal" role="dialog">
         <div class="modal-dialog" role="document" style="width: 85%;">
@@ -574,14 +599,12 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 		
 			<div class="btn-toolbar" role="toolbar" style="height: 80px;">
 				<form class="form-inline" role="form" style="position: relative;top: 8%; left: 5px;">
-				  
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">姓名</div>
 				      <input class="form-control" type="text" id="query-name">
 				    </div>
 				  </div>
-				  
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">学号</div>
@@ -600,14 +623,14 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 					  <input class="form-control" type="text" id="query-classname">
 				    </div>
 				  </div>
-					<button type="button" class="btn btn-default" id="queryActivityBtn">查询</button>
+					<button type="button" class="btn btn-default" id="queryReaderBtn">查询</button>
 				</form>
 			</div>
 			<div class="btn-toolbar" role="toolbar" style="background-color: #F7F7F7; height: 50px; position: relative;top: 5px;">
 				<div class="btn-group" style="position: relative; top: 18%;">
-				  <button type="button" class="btn btn-primary" id="createActivityBtn"><span class="glyphicon glyphicon-plus"></span> 创建</button>
-				  <button type="button" class="btn btn-default" id="editActivityBtn"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
-				  <button type="button" class="btn btn-danger" id="deleteActivityBtn"><span class="glyphicon glyphicon-minus"></span> 删除</button>
+				  <button type="button" class="btn btn-primary" id="addReaderBtn"><span class="glyphicon glyphicon-plus"></span> 创建</button>
+				  <button type="button" class="btn btn-default" id="editReaderBtn"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
+				  <button type="button" class="btn btn-danger" id="deleteReaderBtn"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 				</div>
 				<div class="btn-group" style="position: relative; top: 18%;">
                     <button type="button" class="btn btn-default" data-toggle="modal" data-target="#importActivityModal" ><span class="glyphicon glyphicon-import"></span> 上传列表数据（导入）</button>
@@ -621,7 +644,9 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 						<tr style="color: #B3B3B3;">
 							<td><input type="checkbox" id="chckAll"/></td>
 							<td>姓名</td>
+							<td>姓别</td>
 							<td>学号</td>
+							<td>手机号</td>
 							<td>系别</td>
 							<td>班级</td>
 						</tr>
