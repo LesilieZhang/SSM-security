@@ -22,9 +22,25 @@
 		//给"登录"按钮添加单击事件
 		$("#loginBtn").click(function () {
 			//收集参数
+			var manager=$("#ManagerLogin").prop("checked");
+			var reader=$("#ReaderLogin").prop("checked");
 			var loginAct=$.trim($("#loginAct").val());
 			var loginPwd=$.trim($("#loginPwd").val());
 			var isRemPwd=$("#isRemPwd").prop("checked");
+			var userType=null;
+			if(manager==false&&reader==false){
+				alert("请至少选择一种登录方式！")
+				return;
+			}
+			if(manager&&reader){
+				alert("只能选择一种登录方式");
+				return;
+			}
+			if(manager==true&&reader==false){
+				userType="0";
+			}else{
+				userType="1";
+			}
 			//表单验证
 			if(loginAct==""){
 				alert("用户名不能为空");
@@ -42,14 +58,20 @@
 				data:{
 					loginAct:loginAct,
 					loginPwd:loginPwd,
+					userType:userType,
 					isRemPwd:isRemPwd
+
 				},
 				type:'post',
 				dataType:'json',
 				success:function (data) {
 					if(data.code=="1"){
 						//跳转到业务主页面
-						window.location.href="workbench/index.do";
+						if(data.userType=="0"){
+							window.location.href="workbench/index.do";
+						}else{
+							window.location.href="workbench/index2.do";
+						}
 					}else{
 						//提示信息
 						$("#msg").text(data.message);
@@ -97,11 +119,18 @@
 							</c:if>
 							 十天内免登录
 						</label>
-						&nbsp;&nbsp;
+						<label>
+							<input type="checkbox" id="ManagerLogin" >
+							管理员
+						</label>
+						<label>
+							<input type="checkbox" id="ReaderLogin">
+							读者
+						</label>
 						<span id="msg" style="color: red"></span>
-					</div>
 					<button type="button" id="loginBtn" class="btn btn-primary btn-lg btn-block"  style="width: 350px; position: relative;top: 45px;">登录</button>
 				</div>
+					</div>
 			</form>
 		</div>
 	</div>

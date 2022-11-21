@@ -153,7 +153,6 @@ public class ReaderController {
         @RequestMapping("/workbench/reader/deleteReaderIds.do")
         @ResponseBody
         public Object deleteReader(String[] id){
-        logger.info("删除==="+id);
             //形参String[] id：接受前台发来的数组
             ReturnObject returnObject=new ReturnObject();
             try{

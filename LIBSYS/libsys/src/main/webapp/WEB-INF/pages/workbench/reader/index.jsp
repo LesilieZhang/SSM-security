@@ -110,7 +110,6 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 		});
 
 		//当主页面加载完成，查询所有数据的第一页以及所有数据的总条数,默认每页显示10条
-	//	queryActivityByConditionForPage(1,10);
 		queryReaderByConditionForPage(1,10);
 
 		//给"查询"按钮添加单击事件
@@ -663,7 +662,7 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 						</tr>
 					</thead>
 					<tbody id="tBody">
-						<%--<tr class="active">
+						<tr class="active">
 							<td><input type="checkbox" /></td>
 							<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='detail.html';">发传单</a></td>
                             <td>zhangsan</td>
@@ -676,7 +675,7 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
                             <td>zhangsan</td>
                             <td>2020-10-10</td>
                             <td>2020-10-20</td>
-                        </tr>--%>
+                        </tr>
 					</tbody>
 				</table>
 				<div id="demo_pag1"></div>

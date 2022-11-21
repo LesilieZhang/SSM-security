@@ -18,4 +18,10 @@ public class WorkbenchIndexController {
         //跳转到业务主页面
         return "workbench/index";
     }
+
+    @RequestMapping("/workbench/index2.do")
+    public String index2(){
+        //跳转到main/index.jsp
+        return "workbench/index2";
+    }
 }

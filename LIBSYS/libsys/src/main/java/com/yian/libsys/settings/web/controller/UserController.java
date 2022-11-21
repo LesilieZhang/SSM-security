@@ -49,8 +49,9 @@ public class UserController {
 
     @RequestMapping("/settings/qx/user/login.do")
     @ResponseBody
-    public Object login(String loginAct, String loginPwd, String isRemPwd, HttpServletRequest request, HttpServletResponse response, HttpSession session){
+    public Object login(String loginAct, String loginPwd, String isRemPwd, String userType,HttpServletRequest request, HttpServletResponse response, HttpSession session){
        logger.info("=====进入方法");
+
         //封装参数
         Map<String,Object> map=new HashMap<>();
         map.put("loginAct",loginAct);
@@ -59,7 +60,7 @@ public class UserController {
         //传给sql语句的才要封装
         //调用service层方法，查询用户
         User user=userService.queryUserByLoginActAndPwd(map);
-       logger.info("返回的用户登录名=="+user.getLoginAct());
+
         //根据查询结果，生成响应信息
         ReturnObject returnObject=new ReturnObject();
         if(user==null) {
@@ -79,6 +80,13 @@ public class UserController {
             }else{
                 //登录成功
                 returnObject.setCode(Contants.RETURN_OBJECT_CODE_SUCCESS);
+                if("0".equals(userType)){
+                    logger.info("管理员登录");
+                    returnObject.setUserType("0");
+                }else {
+                    logger.info("读者登录");
+                    returnObject.setUserType("1");
+                }
                 //把user保存到session中
                 session.setAttribute(Contants.SESSION_USER,user);
                 //如果需要记住密码，则往外写cookie
@@ -101,6 +109,7 @@ public class UserController {
             }
         }
         logger.info("返回的是=="+returnObject.getCode());
+        logger.info("返回的用户类型=="+returnObject.getUserType());
         return returnObject;
     }
 
