@@ -402,7 +402,6 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 					htmlStr+="</tr>";
 				});
 				$("#tBody").html(htmlStr);
-
 				//取消"全选"按钮
 				$("#chckAll").prop("checked",false);
 
@@ -413,7 +412,6 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 				}else{
 					totalPages=parseInt(data.totalRows/pageSize)+1;
 				}
-
 				//对容器调用bs_pagination工具函数，显示翻页信息
 				$("#demo_pag1").bs_pagination({
 					currentPage:pageNo,//当前页号,相当于pageNo
@@ -442,6 +440,40 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 		});
 	}
 
+	<!--根据读者学号查询-->
+	function queryBookDetailByStudentId(id,pageNo,pageSize){
+		//收集参数
+		var id=id;
+		var pageNo=pageNo;
+		var pageSize=pageSize;
+		//发送请求
+		$.ajax({
+			url: 'workbench/reader/queryBookDetailByStudentIdForPage.do',
+			data: {
+				id: id
+			},
+			type: 'post',
+			dataType: 'json',
+			success: function (data) {
+				//显示总条数
+				//$("#totalRowsB").text(data.totalRows);
+				//显示市场活动的列表
+				//遍历readerList，拼接所有行数据
+				var htmlStr = "";
+				console.log("返回来的data==" + data.totalRows)
+				$.each(data.bookList, function (index, obj) {
+					console.log("id" + obj.id);
+					console.log("name" + obj.bookname);
+					htmlStr += "<td>" + obj.id +"</td>";
+					htmlStr += "<td>" + obj.bookname + "</td>";
+					htmlStr += "<td>" + obj.lendTime + "</td>";
+					htmlStr += "<td>" + obj.late + "</td>";
+					htmlStr += "</tr>";
+				});
+				$("#tBody1").html(htmlStr);
+			}
+		});
+	}
 
 
 </script>
@@ -618,26 +650,9 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 								<td>是否逾期</td>
 							</tr>
 							</thead>
-							<tbody id="tBody1">
-							<tr class="active">
-								<td><input type="checkbox" /></td>
-								<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='detail.html';">发传单</a></td>
-								<td>zhangsan</td>
-								<td>2020-10-10</td>
-								<td>2020-10-20</td>
-							</tr>
-							<tr class="active">
-								<td><input type="checkbox" /></td>
-								<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='detail.html';">发传单</a></td>
-								<td>zhangsan</td>
-								<td>2020-10-10</td>
-								<td>2020-10-20</td>
-							</tr>
-							</tbody>
+							<tbody id="tBody1"></tbody>
 						</table>
-						<div id="demo_pag2"></div>
 					</div>
-
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
