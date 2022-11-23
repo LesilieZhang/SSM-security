@@ -6,7 +6,9 @@ import com.yian.libsys.commons.utils.UUIDUtils;
 import com.yian.libsys.settings.domain.User;
 import com.yian.libsys.settings.service.UserService;
 import com.yian.libsys.settings.web.controller.UserController;
+import com.yian.libsys.worbench.domain.Lend;
 import com.yian.libsys.worbench.domain.Reader;
+import com.yian.libsys.worbench.service.LendService;
 import com.yian.libsys.worbench.service.ReaderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +43,9 @@ public class ReaderController {
 
     @Autowired
     private ReaderService readerService;
+
+    @Autowired
+    private LendService lendService;
 
     @RequestMapping("/workbench/reader/index.do")
     public String index(HttpServletRequest request){
@@ -116,11 +121,12 @@ public class ReaderController {
     @RequestMapping("/workbench/reader/queryReaderById.do")
     @ResponseBody
     public Object queryReaderById(String id,HttpSession session){
+        logger.info("传过来的id是==="+id);
         Reader reader=readerService.queryReaderById(id);
         //根据查询结果，返回响应信息
         User user=(User) session.getAttribute(Contants.SESSION_USER);
         reader.setCreateUser(user.getName());
-        logger.info("返回的数据==="+reader.getId());
+        logger.info("返回的学号是=="+reader.getIdNumber());
         return reader;
     }
 
@@ -170,5 +176,26 @@ public class ReaderController {
                 returnObject.setMessage("系统忙，请稍后重试....");
             }
             return returnObject;
+        }
+
+        @RequestMapping("/workbench/reader/queryBookDetailByStudentIdForPage.do")
+        @ResponseBody
+        public Object queryBookDetailByStudentIdForPage(String id){
+            List<Lend> bookList=lendService.queryBookByStuendtId(id);
+            logger.info("查询回来的数据bookList==="+bookList);
+            Date curryDate=new Date();
+            for(int i=0;i<bookList.size();i++){
+                Date lendtime=bookList.get(i).getLendtime();
+                if(curryDate.compareTo(lendtime)>30){
+                    bookList.get(i).setLate("1");
+                }
+            }
+            int totalRows=bookList.size();
+            //根据查询结果结果，生成响应信息
+            Map<String,Object> retMap=new HashMap<>();
+            retMap.put("bookList",bookList);
+            retMap.put("totalRows",totalRows);
+            logger.info("retMap===="+retMap);
+            return retMap;
         }
 }
