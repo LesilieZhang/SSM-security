@@ -186,11 +186,14 @@ public class ReaderController {
             logger.info("查询回来的数据bookList==="+bookList);
             Date curryDate=new Date();
             for(int i=0;i<bookList.size();i++){
-                String lendtime=bookList.get(i).getLendtime();
-                logger.info("lentime==="+lendtime);
-             /*   if(curryDate.compareTo(lendtime)>30){
-                    bookList.get(i).setLate("1");
-                }*/
+                Lend lend=bookList.get(i);
+                String lendtime=lend.getLendtime();
+                String nowDate=DateUtils.formateDateTime(curryDate);
+                if(nowDate.compareTo(lendtime)>30){
+                    lend.setLate(Contants.ISLATE);//逾期
+                }else{
+                   lend.setLate(Contants.NOTLATE);
+                }
             }
             int totalRows=bookList.size();
             //根据查询结果结果，生成响应信息

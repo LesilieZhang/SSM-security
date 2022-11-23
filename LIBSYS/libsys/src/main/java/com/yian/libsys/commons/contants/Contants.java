@@ -7,4 +7,13 @@ public class Contants {
 
     //保存当前用户的key
     public static final String SESSION_USER="sessionUser";
+
+    //性别
+    public static final String SEX_MAN="男";
+    public static final String SEX_WOMAN="女";
+
+    //逾期
+    public static final String ISLATE="逾期";
+
+    public static final String NOTLATE="否";
 }
