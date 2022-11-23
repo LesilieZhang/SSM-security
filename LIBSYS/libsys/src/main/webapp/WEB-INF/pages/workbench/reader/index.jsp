@@ -208,6 +208,43 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 				}
 			});
 		});
+
+		//给"查看详情"按钮添加单击事件
+		$("#checkDetialBtn").click(function () {
+			//收集参数:id
+			//获取列表中被选中的checkbox
+			var chkedIds=$("#tBody input[type='checkbox']:checked");//被选中的checkbox
+			console.log("选中的id==="+chkedIds)
+			if(chkedIds.size()==0){
+				alert("请选择要查看的读者");
+				return;
+			}
+			if(chkedIds.size()>1){
+				alert("每次只能查看一名读者信息");
+				return;
+			}
+			var id=chkedIds[0].value; //获取value值
+			//发送请求
+			$.ajax({
+				url:'workbench/reader/queryReaderById.do',
+				data:{
+					id:id,
+					pageNo:1,
+					pageSize:10
+				},
+				type:'post',
+				dataType:'json',
+				success:function (data) {
+					//把市场活动的信息显示在修改的模态窗口上
+					console.log("返回的学号是=="+data.idNumber)
+					var studentId=data.idNumber;
+					//弹出模态窗口
+					$("#DetailModal").modal("show");
+					queryBookDetailByStudentId(studentId,1,10);
+				}
+			});
+		});
+
 		//给"更新"按钮添加单击事件
 		$("#saveEditReaderBtn").click(function () {
 			//收集参数
@@ -405,6 +442,8 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 		});
 	}
 
+
+
 </script>
 </head>
 <body>
@@ -557,6 +596,55 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 			</div>
 		</div>
 	</div>
+
+	<!-- 查看读者详细信息的模态窗口 -->
+	<div class="modal fade" id="DetailModal" role="dialog">
+		<div class="modal-dialog" role="document" style="width: 85%;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">×</span>
+					</button>
+					<h4 class="modal-title" id="myModalDetail">查看读者的借阅信息</h4>
+				</div>
+				<div class="modal-body">
+					<div style="position: relative;top: 10px;">
+						<table class="table table-hover">
+							<thead>
+							<tr style="color: #B3B3B3;">
+								<td>图书编号</td>
+								<td>图书名称</td>
+								<td>借书日期</td>
+								<td>是否逾期</td>
+							</tr>
+							</thead>
+							<tbody id="tBody1">
+							<tr class="active">
+								<td><input type="checkbox" /></td>
+								<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='detail.html';">发传单</a></td>
+								<td>zhangsan</td>
+								<td>2020-10-10</td>
+								<td>2020-10-20</td>
+							</tr>
+							<tr class="active">
+								<td><input type="checkbox" /></td>
+								<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='detail.html';">发传单</a></td>
+								<td>zhangsan</td>
+								<td>2020-10-10</td>
+								<td>2020-10-20</td>
+							</tr>
+							</tbody>
+						</table>
+						<div id="demo_pag2"></div>
+					</div>
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				</div>
+			</div>
+		</div>
+	</div>
 	<!-- 导入市场活动的模态窗口 -->
     <div class="modal fade" id="importActivityModal" role="dialog">
         <div class="modal-dialog" role="document" style="width: 85%;">
@@ -605,7 +693,7 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 	</div>
 	<div style="position: relative; top: -20px; left: 0px; width: 100%; height: 100%;">
 		<div style="width: 100%; position: absolute;top: 5px; left: 10px;">
-		
+
 			<div class="btn-toolbar" role="toolbar" style="height: 80px;">
 				<form class="form-inline" role="form" style="position: relative;top: 8%; left: 5px;">
 				  <div class="form-group">
