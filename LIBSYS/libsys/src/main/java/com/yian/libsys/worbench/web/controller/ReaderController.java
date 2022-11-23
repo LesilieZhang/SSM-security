@@ -1,17 +1,14 @@
 package com.yian.libsys.worbench.web.controller;
 
-import com.mysql.cj.xdevapi.JsonArray;
 import com.yian.libsys.commons.contants.Contants;
 import com.yian.libsys.commons.utils.DateUtils;
 import com.yian.libsys.commons.utils.UUIDUtils;
 import com.yian.libsys.settings.domain.User;
 import com.yian.libsys.settings.service.UserService;
-import com.yian.libsys.settings.web.controller.UserController;
 import com.yian.libsys.worbench.domain.Lend;
 import com.yian.libsys.worbench.domain.Reader;
 import com.yian.libsys.worbench.service.LendService;
 import com.yian.libsys.worbench.service.ReaderService;
-import net.sf.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -189,10 +186,11 @@ public class ReaderController {
             logger.info("查询回来的数据bookList==="+bookList);
             Date curryDate=new Date();
             for(int i=0;i<bookList.size();i++){
-                Date lendtime=bookList.get(i).getLendtime();
-                if(curryDate.compareTo(lendtime)>30){
+                String lendtime=bookList.get(i).getLendtime();
+                logger.info("lentime==="+lendtime);
+             /*   if(curryDate.compareTo(lendtime)>30){
                     bookList.get(i).setLate("1");
-                }
+                }*/
             }
             int totalRows=bookList.size();
             //根据查询结果结果，生成响应信息

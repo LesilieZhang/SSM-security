@@ -464,9 +464,10 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 				$.each(data.bookList, function (index, obj) {
 					console.log("id" + obj.id);
 					console.log("name" + obj.bookname);
+					console.log("lendtime"+obj.lendTime);
 					htmlStr += "<td>" + obj.id +"</td>";
 					htmlStr += "<td>" + obj.bookname + "</td>";
-					htmlStr += "<td>" + obj.lendTime + "</td>";
+					htmlStr += "<td>" + obj.lendtime + "</td>";
 					htmlStr += "<td>" + obj.late + "</td>";
 					htmlStr += "</tr>";
 				});
