@@ -16,4 +16,8 @@ public class Contants {
     public static final String ISLATE="逾期";
 
     public static final String NOTLATE="否";
+
+    //是否可借
+    public static final String CANLEND="可借";
+    public static final String CANNOTLEND="已借出";
 }
