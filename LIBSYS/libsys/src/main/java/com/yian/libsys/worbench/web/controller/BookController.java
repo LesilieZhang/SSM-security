@@ -96,6 +96,8 @@ public class BookController {
         List<Book> bookList = bookService.queryBookByConditionForPage(map);
         for(int i=0;i<bookList.size();i++){
             Book book=bookList.get(i);
+            String addTime=book.getAddtime();
+            logger.info("addTime==="+addTime);
             if("0".equals(book.getStatus())){
                 book.setStatus(Contants.CANLEND);
             }else{
@@ -114,19 +116,19 @@ public class BookController {
 
     @RequestMapping("/workbench/book/queryBookById.do")
     @ResponseBody
-    public Object queryBookById(String bookid, HttpSession session) {
-        logger.info("传过来的id是===" + bookid);
-        Book book=bookService.queryBookById(bookid);
+    public Object queryBookById(String id, HttpSession session) {
+        logger.info("传过来的id是===" + id);
+        Book book=bookService.queryBookById(id);
         //根据查询结果，返回响应信息
         User user = (User) session.getAttribute(Contants.SESSION_USER);;
         return book;
     }
 
-    @RequestMapping("/workbench/book/saveEditBook.do")
+    @RequestMapping("/workbench/books/saveEditBook.do")
     @ResponseBody
     public Object saveEditBook(Book book, HttpSession session) {
-        //获得当前的user
-        User user = (User) session.getAttribute(Contants.SESSION_USER);
+        logger.info("进入方法");
+        logger.info("book信息"+book.getId());
         ReturnObject returnObject = new ReturnObject();
         try {
             int ret = bookService.saveEditBook(book);
@@ -149,6 +151,7 @@ public class BookController {
     @ResponseBody
     public Object deleteBook(String[] id) {
         //形参String[] id：接受前台发来的数组
+        logger.info("id==="+id);
         ReturnObject returnObject = new ReturnObject();
         try {
             int ret = bookService.deleteBookByIds(id);

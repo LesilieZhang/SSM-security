@@ -69,18 +69,11 @@ public class ReaderController {
         reader.setUpdateUser(user.getName());
         reader.setStatus(1);//正常状态
         ReturnObject returnObject = new ReturnObject();
-        logger.info("读者信息==" + reader.getClassname());
-        logger.info("读者信息==" + reader.getDeptname());
-        logger.info("读者信息==" + reader.getIdNumber());
-        logger.info("读者信息==" + reader.getName());
-        logger.info("读者信息==" + reader.getSex());
-        logger.info("读者信息==" + reader.getPhone());
-        logger.info("读者信息==" + reader.getId());
         try {
             int ret = readerService.saveReader(reader);
-            logger.info("返回信息==" + ret);
             if (ret > 0) {
                 returnObject.setCode(Contants.RETURN_OBJECT_CODE_SUCCESS);
+                returnObject.setMessage("添加成功！");
             } else {
                 returnObject.setCode(Contants.RETURN_OBJECT_CODE_FAIL);
                 returnObject.setMessage("系统忙,请稍后重试....");
@@ -141,6 +134,7 @@ public class ReaderController {
             int ret = readerService.saveEditReader(reader);
             if (ret > 0) {
                 returnObject.setCode(Contants.RETURN_OBJECT_CODE_SUCCESS);
+                returnObject.setMessage("修改成功！");
             } else {
                 returnObject.setCode(Contants.RETURN_OBJECT_CODE_FAIL);
                 returnObject.setMessage("系统忙，请稍后重试....");

@@ -33,15 +33,24 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 		//给"保存"按钮添加单击事件
 		$("#saveBookBtn").click(function () {
 			//收集参数
-			var createBy=$("#create-createBy").val();//创建者
+			var bookid=$.trim($("#create-bookid").val());//图书编号
 			var bookname=$.trim($("#create-bookName").val());//书名
 			var author=$.trim($("#create-author").val());//作者
 			var price =$.trim($("#create-price").val());//价格
 			var location=$.trim($("#create-location").val());//书籍位置
 			var status=$("#create-status").val();//是否可借
 			//表单验证
-			if(createBy==""){
-				alert("操作人不能为空");
+			if(bookid==""){
+				alert("图书编号不能为空");
+				return;
+			}
+			var myreg=/[0-9]/g;
+			if(!myreg.test(bookid)){
+				alert("请输入正确图书编号！")
+				return;
+			}
+			if(bookid.length!=13){
+				alert("请输入13位IBSN编号！")
 				return;
 			}
 			if(bookname==""){
@@ -64,7 +73,7 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 			$.ajax({
 				url:'workbench/book/saveBook.do',
 				data:{
-					creatBy:createBy,
+					id:bookid,
 					bookname:bookname,
 					author:author,
 					price:price,
@@ -76,6 +85,7 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 				success:function (data) {
 					if(data.code=="1"){
 						//关闭模态窗口
+						window.confirm("添加成功！");
 						$("#AddBookModal").modal("hide");
 						//刷新市场活动列，显示第一页数据，保持每页显示条数不变
 					//	queryActivityByConditionForPage(1,$("#demo_pag1").bs_pagination('getOption', 'rowsPerPage'));
@@ -131,7 +141,7 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 			//获取列表中所有被选中的checkbox
 			var chekkedIds=$("#tBody input[type='checkbox']:checked");
 			if(chekkedIds.size()==0){
-				alert("请选择要删除的市场活动");
+				alert("请选择要删除的图书信息");
 				return;
 			}
 			if(window.confirm("确定删除吗？")){
@@ -140,7 +150,7 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 					ids+="id="+this.value+"&";
 				});
 				ids=ids.substr(0,ids.length-1);//id=xxxx&id=xxx&.....&id=xxx
-
+				console.log("删除id==="+id);
 				//发送请求
 				$.ajax({
 					url:'workbench/Book/deleteBookIds.do',
@@ -174,6 +184,7 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 				return;
 			}
 			var id=chkedIds[0].value; //获取value值
+			console.log("选择的id=="+id)
 			//发送请求
 			$.ajax({
 				url:'workbench/book/queryBookById.do',
@@ -183,13 +194,14 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 				type:'post',
 				dataType:'json',
 				success:function (data) {
-					//把市场活动的信息显示在修改的模态窗口上
+					//把图书的信息显示在修改的模态窗口上
 					$("#edit-createBy").val(data.creatBy);
 					$("#edit-bookName").val(data.bookname);
 					$("#edit-author").val(data.author);
 					$("#edit-price").val(data.price);
 					$("#edit-location").val(data.location);
 					$("#edit-status").val(data.status);
+					$("#edit-id").val(data.id);
 					//弹出模态窗口
 					$("#editBookModal").modal("show");
 				}
@@ -199,8 +211,7 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 		$("#saveEditBookBtn").click(function () {
 			//收集参数
 			var id=$("#edit-id").val();
-			var createBy=$("#edit-createBy").val();
-			var bookName=$.trim($("#edit-bookName").val());
+			var bookName=$("#edit-bookName").val();
 			var author=$("#edit-author").val();
 			var price=$("#edit-price").val();
 			var location=$.trim($("#edit-location").val());
@@ -211,7 +222,6 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 				url:'workbench/books/saveEditBook.do',
 				data:{
 					id:id,
-					creatBy:createBy,
 					bookname:bookName,
 					author:author,
 					price:price,
@@ -223,6 +233,7 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 				success:function (data) {
 					if(data.code=="1"){
 						//关闭模态窗口
+						window.confirm("修改成功！");
 						$("#editBookModal").modal("hide");
 						//刷新市场活动列表,保持页号和每页显示条数都不变
 						queryBookByConditionForPage($("#demo_pag1").bs_pagination('getOption', 'currentPage'),$("#demo_pag1").bs_pagination('getOption', 'rowsPerPage'));
@@ -337,14 +348,12 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 				console.log("返回来的data=="+data.bookList)
 				console.log("返回来的data=="+data.totalRows)
 				$.each(data.bookList,function (index,obj) {
-					console.log("addTime==="+obj.addTime);
 					htmlStr+="<tr class=\"active\">";
 					htmlStr+="<td><input type=\"checkbox\" value=\""+obj.id+"\"/></td>";
 					htmlStr+="<td><a style=\"text-decoration: none; cursor: pointer;\" onclick=\"window.location.href='detail.html';\">"+obj.id+"</a></td>";
 					htmlStr+="<td>"+obj.bookname+"</td>";
 					htmlStr+="<td>"+obj.author+"</td>";
 					htmlStr+="<td>"+obj.price+"</td>";
-					htmlStr+="<td>"+obj.addTime+"</td>";
 					htmlStr+="<td>"+obj.location+"</td>";
 					htmlStr+="<td>"+obj.status+"</td>";
 					htmlStr+="</tr>";
@@ -405,14 +414,10 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 					<!--创建读者表单-->
 					<form id="createBookForm" class="form-horizontal" role="form">
 						<div class="form-group">
-							<!--添加操作人-->
-							<label for="create-createBy" class="col-sm-2 control-label">操作人<span style="font-size: 15px; color: red;">*</span></label>
+							<!--添加图书编号-->
+							<label for="create-bookid" class="col-sm-2 control-label">图书编号<span style="font-size: 15px; color: red;">*</span></label>
 							<div class="col-sm-10" style="width: 300px;">
-								<select class="form-control" id="create-createBy">
-								  <c:forEach items="${userList}" var="u">
-									   <option value="${u.id}">${u.name}</option>
-								  </c:forEach>
-								</select>
+								<input type="text" class="form-control" id="create-bookid">
 							</div>
 							<!--添加图书姓名-->
                             <label for="create-bookName" class="col-sm-2 control-label">图书名称<span style="font-size: 15px; color: red;">*</span></label>
@@ -471,14 +476,6 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 					<form class="form-horizontal" role="form">
 						<input type="hidden" id="edit-id">
 						<div class="form-group">
-							<label for="edit-createBy" class="col-sm-2 control-label">操作人<span style="font-size: 15px; color: red;">*</span></label>
-							<div class="col-sm-10" style="width: 300px;">
-								<select class="form-control" id="edit-createBy">
-									<c:forEach items="${userList}" var="u">
-										<option value="${u.id}">${u.name}</option>
-									</c:forEach>
-								</select>
-							</div>
 							<!--添加图书姓名-->
 							<label for="edit-bookName" class="col-sm-2 control-label">图书名称<span style="font-size: 15px; color: red;">*</span></label>
 							<div class="col-sm-10" style="width: 300px;">
@@ -580,7 +577,6 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 							<td>图书名称</td>
 							<td>作者</td>
 							<td>价格</td>
-							<td>添加时间</td>
 							<td>书籍位置</td>
 							<td>借阅状态</td>
 						</tr>
