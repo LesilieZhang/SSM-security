@@ -85,11 +85,149 @@
 				}
 			});
 		});
+		$("#regBtn").click(function (){
+			//初始化工作
+			//重置表单
+			//$("#createUserForm").get(0).reset();
+			//弹出创建市场活动的模态窗口
+			$("#AddUserModal").modal("show");
+		});
+		//给"保存"按钮添加单击事件
+		$("#saveUserBtn").click(function () {
+			//收集参数
+			var username=$.trim($("#username").val());
+			var loginAct=$.trim($("#loginName").val());
+			var password =$.trim($("#password").val());
+			var passwordConfirm=$.trim($("#passwordConfirm").val());
+			var email=$.trim($("#email").val());
+			//表单验证
+			if(username==""){
+				alert("用户名不能为空");
+				return;
+			}
+			if(loginAct==""){
+				alert("登录名不能为空");
+				return;
+			}
+			if(password!=passwordConfirm){
+				alert("两次输入的密码不一致");
+				return;
+			}
+			if(password.length!=6){
+				alert("请输入六位密码！")
+				return;
+			}
+			var msg=/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+		    if(!msg.test(email)){
+				alert("请输入正确邮箱！")
+				return;
+			}
+			//发送请求
+			$.ajax({
+				url:'settings/qx/register/register.do',
+				data:{
+				    username:username,
+					loginAct:loginAct,
+					password,password,
+					email,email
+				},
+				type:'post',
+				dataType:'json',
+				success:function (data) {
+					if(data.code=="1"){
+						//关闭模态窗口
+						window.confirm("注册成功！");
+						$("#AddUserModal").modal("hide");
+					}else{
+						//提示信息
+						alert(data.message);
+						//模态窗口不关闭
+						$("#AddUserModal").modal("show");
+					}
+				}
+			});
+		});
 	});
 </script>
 </head>
 <body>
-	<div style="position: absolute; top: 0px; left: 0px; width: 60%;">
+
+<!-- 创建用户模态窗口 -->
+<div class="modal fade" id="AddUserModal" role="dialog">
+	<div class="modal-dialog" role="document" style="width: 85%;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+					<span aria-hidden="true">×</span>
+				</button>
+				<h4 class="modal-title" id="myModalLabel1">用户注册</h4>
+			</div>
+			<div class="modal-body">
+				<form id="createUserForm" class="form-horizontal" role="form">
+
+					<div class="form-group has-feedback">
+						<label for="username">用户名</label>
+						<div class="input-group">
+							<span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+							<input id="username" class="form-control" placeholder="请输入用户名" maxlength="20" type="text">
+						</div>
+						<span style="color:red;display: none;" class="tips"></span>
+						<span style="display: none;" class=" glyphicon glyphicon-remove form-control-feedback"></span>
+						<span style="display: none;" class="glyphicon glyphicon-ok form-control-feedback"></span>
+					</div>
+					<div class="form-group has-feedback">
+						<label for="loginName">登录账号</label>
+						<div class="input-group">
+							<span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+							<input id="loginName" class="form-control" maxlength="20" type="text">
+						</div>
+						<span style="color:red;display: none;" class="tips"></span>
+						<span style="display: none;" class=" glyphicon glyphicon-remove form-control-feedback"></span>
+						<span style="display: none;" class="glyphicon glyphicon-ok form-control-feedback"></span>
+					</div>
+					<div class="form-group has-feedback">
+						<label for="password">密码</label>
+						<div class="input-group">
+							<span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+							<input id="password" class="form-control" placeholder="请输入密码" maxlength="20" type="password">
+						</div>
+						<span style="color:red;display: none;" class="tips"></span>
+						<span style="display: none;" class="glyphicon glyphicon-remove form-control-feedback"></span>
+						<span style="display: none;" class="glyphicon glyphicon-ok form-control-feedback"></span>
+					</div>
+					<div class="form-group has-feedback">
+						<label for="passwordConfirm">确认密码</label>
+						<div class="input-group">
+							<span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+							<input id="passwordConfirm" class="form-control" placeholder="请再次输入密码" maxlength="20" type="password">
+						</div>
+						<span style="color:red;display: none;" class="tips"></span>
+						<span style="display: none;" class="glyphicon glyphicon-remove form-control-feedback"></span>
+						<span style="display: none;" class="glyphicon glyphicon-ok form-control-feedback"></span>
+					</div>
+					<div class="form-group has-feedback">
+						<label for="email">邮箱</label>
+						<div class="input-group">
+							<span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
+							<input id="email" class="form-control" placeholder="请输入邮箱"  type="text">
+						</div>
+						<span style="color:red;display: none;" class="tips"></span>
+						<span style="display: none;" class="glyphicon glyphicon-remove form-control-feedback"></span>
+						<span style="display: none;" class="glyphicon glyphicon-ok form-control-feedback"></span>
+					</div>
+					<div class="form-group">
+						<input class="form-control btn btn-primary" id="saveUserBtn" value="立&nbsp;&nbsp;即&nbsp;&nbsp;注&nbsp;&nbsp;册" type="submit">
+					</div>
+					<div class="form-group">
+						<input value="重置" id="reset" class="form-control btn btn-danger" type="reset">
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div style="position: absolute; top: 0px; left: 0px; width: 60%;">
 		<img src="image/login.jpg" style="width: 100%; height: 90%; position: relative; top: 50px;">
 	</div>
 	<div id="top" style="height: 50px; background-color: #3C3C3C; width: 100%;">
@@ -129,6 +267,7 @@
 						</label>
 						<span id="msg" style="color: red"></span>
 					<button type="button" id="loginBtn" class="btn btn-primary btn-lg btn-block"  style="width: 350px; position: relative;top: 45px;">登录</button>
+						<button type="button" id="regBtn" class="btn btn-primary btn-lg btn-block"  style="width: 350px; position: relative;top: 45px;">注册</button>
 				</div>
 					</div>
 			</form>

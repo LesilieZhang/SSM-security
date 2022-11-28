@@ -167,7 +167,7 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 				<li class="liClass"><a href="workbench/main/index.do" target="workareaFrame"><span class="glyphicon glyphicon-home"></span> 公告栏</a></li>
 				<li class="liClass"><a href="workbench/reader/index.do" target="workareaFrame"><span class="glyphicon glyphicon-user"></span> 读者管理</a></li>
 				<li class="liClass"><a href="workbench/book/index.do" target="workareaFrame"><span class="glyphicon glyphicon-book"></span> 图书管理</a></li>
-				<li class="liClass"><a href="javascript:void(0);" target="workareaFrame"><span class="glyphicon glyphicon-user"></span> 客户公海</a></li>
+				<li class="liClass"><a href="javascript:void(0);" target="workareaFrame"><span class="glyphicon glyphicon-user"></span>用户管理</a></li>
 			</ul>
 			
 			<!-- 分割线 -->
