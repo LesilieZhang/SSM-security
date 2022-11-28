@@ -128,8 +128,8 @@
 				data:{
 				    username:username,
 					loginAct:loginAct,
-					password,password,
-					email,email
+					password:password,
+					email:email
 				},
 				type:'post',
 				dataType:'json',
@@ -189,7 +189,7 @@
 						<label for="password">密码</label>
 						<div class="input-group">
 							<span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
-							<input id="password" class="form-control" placeholder="请输入密码" maxlength="20" type="password">
+							<input class="form-control" id="password" type="password"  placeholder="密码">
 						</div>
 						<span style="color:red;display: none;" class="tips"></span>
 						<span style="display: none;" class="glyphicon glyphicon-remove form-control-feedback"></span>

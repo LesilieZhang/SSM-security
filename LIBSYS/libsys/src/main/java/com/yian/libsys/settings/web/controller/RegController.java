@@ -3,6 +3,7 @@ package com.yian.libsys.settings.web.controller;
 import com.yian.libsys.commons.contants.Contants;
 import com.yian.libsys.commons.domain.ReturnObject;
 import com.yian.libsys.commons.utils.DateUtils;
+import com.yian.libsys.commons.utils.UUIDUtils;
 import com.yian.libsys.settings.domain.User;
 import com.yian.libsys.settings.service.UserService;
 import org.slf4j.Logger;
@@ -40,6 +41,7 @@ public class RegController {
     public Object register(User user, String username, String loginAct, String password, String email){
         logger.info("username=="+username);
         ReturnObject returnObject=new ReturnObject();
+        user.setId(UUIDUtils.getUUID());
         user.setLoginAct(loginAct);
         user.setName(username);
         user.setLoginPwd(password);
