@@ -178,8 +178,9 @@ public class ReaderController {
             Date curryDate=new Date();
             for(int i=0;i<bookList.size();i++){
                 Lend lend=bookList.get(i);
-                String lendtime=lend.getLendtime();
+                Date lendDate=lend.getLendtime();
                 String nowDate=DateUtils.formateDateTime(curryDate);
+                String lendtime=DateUtils.formateDateTime(lendDate);
                 if(nowDate.compareTo(lendtime)>30){
                     lend.setLate(Contants.ISLATE);//逾期
                 }else{

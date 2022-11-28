@@ -29,4 +29,19 @@ public class LendServiceImpl implements LendService {
     public List<Lend> queryBookByStuendtId(String studentId) {
         return lendMapper.selectBookByStudentId(studentId);
     }
+
+    @Override
+    public int saveLend(Lend lend) {
+        return lendMapper.insert(lend);
+    }
+
+    @Override
+    public int updateLend(Lend lend) {
+        return updateLend(lend);
+    }
+
+    @Override
+    public Lend queryLendById(String id) {
+        return lendMapper.selectLendById(id);
+    }
 }

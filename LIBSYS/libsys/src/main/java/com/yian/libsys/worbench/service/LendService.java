@@ -1,8 +1,6 @@
 package com.yian.libsys.worbench.service;
 
 import com.yian.libsys.worbench.domain.Lend;
-import com.yian.libsys.worbench.domain.Reader;
-
 import java.util.List;
 
 /**
@@ -20,4 +18,21 @@ public interface LendService {
      * @return
      */
    List<Lend> queryBookByStuendtId(String studentId);
+
+    /**
+     * 保存借阅信息
+     * @param lend 实体类
+     * @return
+     */
+    int saveLend(Lend lend);
+
+    /**
+     * 更新借阅信息
+     * @param lend
+     * @return
+     */
+    int updateLend(Lend lend);
+
+    Lend queryLendById(String id);
+
 }

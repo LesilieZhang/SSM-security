@@ -53,7 +53,7 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 		var pageSize=10;
 		//发送请求
 		$.ajax({
-			url:'workbench/book/queryBookByConditionForPage.do',
+			url:'workbench/lendbook/queryBookByConditionForPage.do',
 			data:{
 				bookid:bookid,
 				bookname:bookname,

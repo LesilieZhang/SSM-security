@@ -19,7 +19,6 @@
     <script type="text/javascript" src="jquery/bs_pagination-master/localization/en.js"></script>
     <script type="text/javascript">
         $(function(){
-
             $("#lendBtn").click(function(){
                 var bookid=$.trim($("#bookid").val());//图书编号
                 var bookname=$.trim($("#bookname").val());//书名
@@ -57,7 +56,7 @@
                 }
                 //发送请求
                 $.ajax({
-                    url:'workbench/lendmainbook/saveLender.do',
+                    url:'workbench/return/returnBook.do',
                     data:{
                         id:bookid,
                         bookname:bookname,
@@ -103,7 +102,7 @@
         <label for="studentid" class="col-sm-2 control-label">借书人学号</label>
         <input type="text" class="form-control" id="studentid" placeholder="必填">
     </div>
-    <button type="button" class="btn btn-primary" id="lendBtn"><span class="glyphicon glyphicon-plus"></span> 借阅</button>
+    <button type="button" class="btn btn-primary" id="lendBtn"><span class="glyphicon glyphicon-plus"></span> 归还</button>
 </form>
 </body>
 </html>
