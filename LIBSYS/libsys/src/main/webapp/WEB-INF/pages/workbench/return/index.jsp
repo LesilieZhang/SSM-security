@@ -83,26 +83,40 @@
     </script>
 </head>
 <body>
-<form>
-    <div class="form-row">
+<div class="container">
+    <h3 align="center" >归还信息填写</h3>
+<form class="form-horizontal" role="form">
         <div class="form-group">
             <label for="bookid" class="col-sm-2 control-label" >图书编号</label>
+            <div class="col-sm-6">
             <input type="text" class="form-control" id="bookid" placeholder="请输入图书编号">
+            </div>
         </div>
+
         <div class="form-group">
             <label for="bookname" class="col-sm-2 control-label">图书名称</label>
+            <div class="col-sm-6">
             <input type="text" class="form-control" id="bookname">
+            </div>
         </div>
-    </div>
     <div class="form-group">
         <label for="lender" class="col-sm-2 control-label"> 借书人姓名</label>
+        <div class="col-sm-6">
         <input type="text" class="form-control" id="lender" placeholder="必填">
+            </div>
     </div>
     <div class="form-group">
         <label for="studentid" class="col-sm-2 control-label">借书人学号</label>
+        <div class="col-sm-6">
         <input type="text" class="form-control" id="studentid" placeholder="必填">
+        </div>
     </div>
-    <button type="button" class="btn btn-primary" id="lendBtn"><span class="glyphicon glyphicon-plus"></span> 归还</button>
-</form>
+<div class="form-group">
+    <div class="col-sm-offset-3 col-sm-6">
+    <button type="button" class="btn btn-primary" id="lendBtn"><span class="glyphicon glyphicon-ok"></span> 归还</button>
+    </div>
+</div>
+        </form>
+</div>
 </body>
 </html>
