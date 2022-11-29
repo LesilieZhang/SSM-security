@@ -91,54 +91,58 @@
 			//$("#createUserForm").get(0).reset();
 			//弹出创建市场活动的模态窗口
 			$("#AddUserModal").modal("show");
+		//	window.location.href = "settings/qx/user/toRegister.do";
+		//	window.open("settings/qx/user/toRegister.do");
+
 		});
 		//给"保存"按钮添加单击事件
 		$("#saveUserBtn").click(function () {
+			console.log("点击保存===");
 			//收集参数
-			var username=$.trim($("#username").val());
-			var loginAct=$.trim($("#loginName").val());
-			var password =$.trim($("#password").val());
-			var passwordConfirm=$.trim($("#passwordConfirm").val());
-			var email=$.trim($("#email").val());
+			var username = $.trim($("#username").val());
+			var loginAct = $.trim($("#loginName").val());
+			var password = $.trim($("#password").val());
+			var passwordConfirm = $.trim($("#passwordConfirm").val());
+			var email = $.trim($("#email").val());
 			//表单验证
-			if(username==""){
+			if (username == "") {
 				alert("用户名不能为空");
 				return;
 			}
-			if(loginAct==""){
+			if (loginAct == "") {
 				alert("登录名不能为空");
 				return;
 			}
-			if(password!=passwordConfirm){
+			if (password != passwordConfirm) {
 				alert("两次输入的密码不一致");
 				return;
 			}
-			if(password.length!=6){
+			if (password.length != 6) {
 				alert("请输入六位密码！")
 				return;
 			}
-			var msg=/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-		    if(!msg.test(email)){
+			var msg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+			if (!msg.test(email)) {
 				alert("请输入正确邮箱！")
 				return;
 			}
 			//发送请求
 			$.ajax({
-				url:'settings/qx/register/register.do',
-				data:{
-				    username:username,
-					loginAct:loginAct,
-					password:password,
-					email:email
-				},
-				type:'post',
-				dataType:'json',
-				success:function (data) {
-					if(data.code=="1"){
+				url: 'settings/qx/user/register.do',
+				data: {
+					username: username,
+					loginAct: loginAct,
+					password: password,
+					email: email
+                },
+                type:'post',
+                dataType:'json',
+                success:function (data) {
+					if (data.code == "1") {
 						//关闭模态窗口
 						window.confirm("注册成功！");
 						$("#AddUserModal").modal("hide");
-					}else{
+					} else {
 						//提示信息
 						alert(data.message);
 						//模态窗口不关闭
@@ -154,7 +158,7 @@
 
 <!-- 创建用户模态窗口 -->
 <div class="modal fade" id="AddUserModal" role="dialog">
-	<div class="modal-dialog" role="document" style="width: 85%;">
+	<div class="modal-dialog modal-lg" role="document" style="width: 65%;">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">
@@ -164,10 +168,9 @@
 			</div>
 			<div class="modal-body">
 				<form id="createUserForm" class="form-horizontal" role="form">
-
 					<div class="form-group has-feedback">
 						<label for="username">用户名</label>
-						<div class="input-group">
+						<div class="input-group input-group-sm mb-3">
 							<span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
 							<input id="username" class="form-control" placeholder="请输入用户名" maxlength="20" type="text">
 						</div>
@@ -215,13 +218,11 @@
 						<span style="display: none;" class="glyphicon glyphicon-remove form-control-feedback"></span>
 						<span style="display: none;" class="glyphicon glyphicon-ok form-control-feedback"></span>
 					</div>
-					<div class="form-group">
-						<input class="form-control btn btn-primary" id="saveUserBtn" value="立&nbsp;&nbsp;即&nbsp;&nbsp;注&nbsp;&nbsp;册" type="submit">
-					</div>
-					<div class="form-group">
-						<input value="重置" id="reset" class="form-control btn btn-danger" type="reset">
-					</div>
 				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				<button type="button" class="btn btn-primary" id="saveUserBtn">立&nbsp;&nbsp;即&nbsp;&nbsp;注&nbsp;&nbsp;册</button>
 			</div>
 		</div>
 	</div>

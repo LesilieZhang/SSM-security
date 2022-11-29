@@ -3,6 +3,7 @@ package com.yian.libsys.settings.web.controller;
 import com.yian.libsys.commons.contants.Contants;
 import com.yian.libsys.commons.domain.ReturnObject;
 import com.yian.libsys.commons.utils.DateUtils;
+import com.yian.libsys.commons.utils.UUIDUtils;
 import com.yian.libsys.settings.domain.User;
 import com.yian.libsys.settings.service.UserService;
 import org.slf4j.Logger;
@@ -29,7 +30,6 @@ import java.util.Map;
  */
 
 @Controller
-
 public class UserController {
 
     private final static Logger logger = LoggerFactory.getLogger((UserController.class));
@@ -47,11 +47,42 @@ public class UserController {
         return "settings/qx/user/login";
     }
 
+    @RequestMapping("/settings/qx/user/toRegister.do")
+    public String toRegister(){
+        //请求转发到登录页面
+        return "settings/qx/user/register";
+    }
+
+    @RequestMapping("/settings/qx/user/register.do")
+    @ResponseBody
+    public Object register(User user, String username, String loginAct, String password, String email, HttpServletRequest request, HttpServletResponse response, HttpSession session){
+        ReturnObject returnObject=new ReturnObject();
+        user.setId(UUIDUtils.getUUID());
+        user.setLoginAct(loginAct);
+        user.setName(username);
+        user.setLoginPwd(password);
+        user.setEmail(email);
+        user.setLockState("0");//读者
+        user.setCreatetime(DateUtils.formateDateTime(new Date()));
+        try{
+            int ret=userService.saveUser(user);
+            if (ret > 0) {//如果影响记录条数>0
+                returnObject.setCode(Contants.RETURN_OBJECT_CODE_SUCCESS);//删除成功
+            } else {
+                returnObject.setCode(Contants.RETURN_OBJECT_CODE_FAIL);//删除失败
+                returnObject.setMessage("系统忙，请稍后重试....");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            returnObject.setCode(Contants.RETURN_OBJECT_CODE_FAIL);
+            returnObject.setMessage("系统忙，请稍后重试....");
+        }
+        return returnObject;
+    }
+
     @RequestMapping("/settings/qx/user/login.do")
     @ResponseBody
     public Object login(String loginAct, String loginPwd, String isRemPwd, String userType,HttpServletRequest request, HttpServletResponse response, HttpSession session){
-       logger.info("=====进入方法");
-
         //封装参数
         Map<String,Object> map=new HashMap<>();
         map.put("loginAct",loginAct);

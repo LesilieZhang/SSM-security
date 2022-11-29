@@ -555,7 +555,7 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
 					<button type="button" class="btn btn-primary" id="saveReaderBtn">保存</button>
-				</div>
+				</div>0
 			</div>
 		</div>
 	</div>
