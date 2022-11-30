@@ -63,6 +63,12 @@ public class ReaderController {
         //获取当前用户
         User user = (User) session.getAttribute(Contants.SESSION_USER);
         reader.setId(UUIDUtils.getUUID());
+        String sex=reader.getSex();
+        if("0".equals(sex)){
+            reader.setSex(Contants.SEX_WOMAN);
+        }else{
+            reader.setSex(Contants.SEX_MAN);
+        }
         reader.setCreateTime((new Date()));
         reader.setUpdateTime(new Date());
         reader.setCreateUser(user.getName());
@@ -88,13 +94,13 @@ public class ReaderController {
 
     @RequestMapping("/workbench/reader/queryReaderByConditionForPage.do")
     @ResponseBody
-    public Object queryReaderByConditionForPage(String name, String idNum, String dept, String className, int pageNo, int pageSize) {
+    public Object queryReaderByConditionForPage(String name, String idNumber, String deptname, String classname, int pageNo, int pageSize) {
         //封装参数
         Map<String, Object> map = new HashMap<>();
         map.put("name", name);
-        map.put("idNumber", idNum);
-        map.put("deptname", dept);
-        map.put("classname", className);
+        map.put("idNumber", idNumber);
+        map.put("deptname", deptname);
+        map.put("classname", classname);
         map.put("beginNo", (pageNo - 1) * pageSize);
         map.put("pageSize", pageSize);
         logger.info("封装好的map===" + map);

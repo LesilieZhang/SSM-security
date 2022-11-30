@@ -116,7 +116,6 @@ String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.ge
 		$("#queryReaderBtn").click(function () {
 			//查询所有符合条件数据的第一页以及所有符合条件数据的总条数;
 			//queryActivityByConditionForPage(1,$("#demo_pag1").bs_pagination('getOption', 'rowsPerPage'));
-
 			queryReaderByConditionForPage(1,$("#demo_pag1").bs_pagination('getOption', 'rowsPerPage'));
 		});
 

@@ -90,6 +90,7 @@ public class BookController {
         map.put("id", bookid);
         map.put("author", author);
         map.put("status", status);
+        logger.info("status==="+status);
         map.put("beginNo", (pageNo - 1) * pageSize);
         map.put("pageSize", pageSize);
         logger.info("封装好的map===" + map);
@@ -97,7 +98,6 @@ public class BookController {
         for(int i=0;i<bookList.size();i++){
             Book book=bookList.get(i);
             String addTime=book.getAddtime();
-            logger.info("addTime==="+addTime);
             if("0".equals(book.getStatus())){
                 book.setStatus(Contants.CANLEND);
             }else{
