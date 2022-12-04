@@ -1,5 +1,6 @@
 package com.atguigu.system.controller;
 
+import com.atguigu.common.result.Result;
 import com.atguigu.model.system.SysRole;
 import com.atguigu.system.service.SysRoleService;
 import io.swagger.annotations.Api;
@@ -30,10 +31,9 @@ public class SysRoleController {
      */
     @ApiOperation("查询所有的接口")
     @GetMapping("findAll")
-    public List<SysRole> findAllRole(){
-        //调用service
-        List<SysRole> list = sysRoleService.list();
-        return list;
+    public Result<List<SysRole>> findAll() {
+        List<SysRole> roleList = sysRoleService.list();
+        return Result.ok(roleList);
     }
 
     /**
@@ -42,9 +42,13 @@ public class SysRoleController {
      */
     @ApiOperation("逻辑删除的接口")
     @DeleteMapping("remove/{id}")
-    public boolean removeRole(@PathVariable Long id){
+    public Result removeRole(@PathVariable Long id) {
         //调用方法进行删除
-        boolean  isSuccess= sysRoleService.removeById(id);
-        return isSuccess;
+        boolean isSuccess = sysRoleService.removeById(id);
+        if (isSuccess) {
+        return Result.ok();
+        }else{
+            return Result.fail();//失败
+        }
     }
 }
