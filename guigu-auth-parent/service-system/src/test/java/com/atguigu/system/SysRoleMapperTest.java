@@ -1,8 +1,10 @@
 package com.atguigu.system;
 import com.atguigu.model.system.SysRole;
 import com.atguigu.system.mapper.SysRoleMapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
@@ -36,9 +38,15 @@ public class SysRoleMapperTest {
         sysRoleMapper.updateById(sysRole);
     }
 
-    //根据id删除(只删除一个）
+   //条件查询
     @Test
-    public void delete(){
-
+    public void testSelect(){
+        //创建一个条件构造器对象
+        QueryWrapper<SysRole> queryWrapper=new QueryWrapper<>();
+        //第一个参数：表里的字段名称，第二个参数，字段值
+      //  queryWrapper.eq("role_name","用户管理员");
+        queryWrapper.like("role_name","管理员");//模糊查询
+        List<SysRole> sysRoleList = sysRoleMapper.selectList(queryWrapper);
+        System.out.println(sysRoleList);
     }
 }
