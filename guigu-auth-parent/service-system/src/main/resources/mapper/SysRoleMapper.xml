@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.atguigu.system.mapper.SysRoleMapper">
+
+    <!--自定义结果：
+    指定实体类：SysRole
+    自动映射：true
+    -->
+    <resultMap id="RoleMap" type="com.atguigu.model.system.SysRole" autoMapping="true">
+    </resultMap>
+
+    <!-- 用于select查询公用抽取的列 -->
+    <sql id="columns">
+        id,role_name,role_code,description,create_time,update_time,is_deleted
+    </sql>
+
+    <!--条件分页查询-->
+    <select id="selectPage" resultMap="RoleMap">
+        select <include refid="columns" />
+        from sys_role
+        <where>
+
+        <!--vo的属性值有内容-->
+
+            <if test="vo.roleName != null and vo.roleName != ''">
+            <!--CONCAT：拼上条件 %#{vo.roleName) % 模糊查询
+            -->
+                and role_name like CONCAT('%',#{vo.roleName},'%')
+            </if>
+            <!--未被逻辑删除-->
+            and is_deleted = 0
+        </where>
+        order by id desc
+    </select>
+
+</mapper>
