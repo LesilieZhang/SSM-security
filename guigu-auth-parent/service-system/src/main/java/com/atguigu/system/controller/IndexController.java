@@ -27,10 +27,10 @@ public class IndexController {
      * 登录接口
      * @return
      */
-    @PostMapping("login")
+    @PostMapping("/login")
     public Result login(){
         Map<String,Object> map=new HashMap<>();
-        map.put("token","admin-token");
+        map.put("token","admin-token atguigu");
         return  Result.ok(map);
     }
 
@@ -38,11 +38,11 @@ public class IndexController {
      * info接口
      * @return
      */
-    @GetMapping("info")
+    @GetMapping("/info")
     public Result info(){
         Map<String,Object> map=new HashMap<>();
         map.put("roles","[admin]");
-        map.put("name","Super Admin");
+        map.put("name","Super Admin atguigu");
         map.put("avatar","https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");//头像
         return Result.ok(map);
     }
